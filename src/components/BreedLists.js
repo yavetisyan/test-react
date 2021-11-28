@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import "./BreedLists.css";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Box } from "@mui/system";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import { Collapse } from "@mui/material";
+
 
 function BreedLists() {
   const [breedList, setBreedList] = useState([]);
@@ -34,28 +41,50 @@ function BreedLists() {
   return (
     <div style={{ display: "flex" }}>
       {isLoading ? (
-        <div className="loader" ></div>
+        <Box
+          sx={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+        >
+          <CircularProgress size="100" />
+        </Box>
       ) : (
-        <ul>
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+          component="ul"
+        >
           {breedListArr.map((breed) => {
             const breedColor = {
               color: breedList[breed].length && "red",
             };
             return (
-              <li
-                key={uuidv4()}
-                onClick={() => imgSrc(breed)}
-                style={{
-                  cursor: "pointer",
-                  margin: 10,
-                  ...breedColor,
-                }}
-              >
-                {breed}
+              <li className='asd'>
+                <ListItemButton
+                  key={breed}
+                  onClick={() => imgSrc(breed)}
+                  style={{
+                    cursor: "pointer",
+                    margin: 10,
+                    ...breedColor,
+                  }}
+                >
+                  <ListItemText primary={breed} />
+                </ListItemButton>
+                <Collapse in timeout="auto" unmountOnExit>
+                  <List component="li" disablePadding>
+                    <ListItemButton sx={{ pl: 4 }}>
+      
+                      <ListItemText primary="Starred" />
+                    </ListItemButton>
+                  </List>
+                </Collapse>
               </li>
             );
           })}
-        </ul>
+        </List>
       )}
 
       {src === "" ? null : (
